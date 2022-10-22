@@ -1,0 +1,4 @@
+class LabelTarget:
+    """ """
+
+    name: str
