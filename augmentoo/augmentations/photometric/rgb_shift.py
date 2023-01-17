@@ -103,6 +103,3 @@ class RGBShift(ImageOnlyTransform):
             "g_shift": random.uniform(self.g_shift_limit[0], self.g_shift_limit[1]),
             "b_shift": random.uniform(self.b_shift_limit[0], self.b_shift_limit[1]),
         }
-
-    def get_transform_init_args_names(self):
-        return ("r_shift_limit", "g_shift_limit", "b_shift_limit")

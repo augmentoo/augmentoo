@@ -141,7 +141,15 @@ class CropAndPad(DualTransform):
         **params,
     ) -> np.ndarray:
         return F.crop_and_pad(
-            img, crop_params, pad_params, pad_value, rows, cols, interpolation, self.pad_mode, self.keep_size
+            img,
+            crop_params,
+            pad_params,
+            pad_value,
+            rows,
+            cols,
+            interpolation,
+            self.pad_mode,
+            self.keep_size,
         )
 
     def apply_to_mask(
@@ -156,7 +164,15 @@ class CropAndPad(DualTransform):
         **params,
     ) -> np.ndarray:
         return F.crop_and_pad(
-            img, crop_params, pad_params, pad_value_mask, rows, cols, interpolation, self.pad_mode, self.keep_size
+            img,
+            crop_params,
+            pad_params,
+            pad_value_mask,
+            rows,
+            cols,
+            interpolation,
+            self.pad_mode,
+            self.keep_size,
         )
 
     def apply_to_bbox(
@@ -170,7 +186,16 @@ class CropAndPad(DualTransform):
         result_cols: int = 0,
         **params,
     ) -> Sequence[float]:
-        return F.crop_and_pad_bbox(bbox, crop_params, pad_params, rows, cols, result_rows, result_cols, self.keep_size)
+        return F.crop_and_pad_bbox(
+            bbox,
+            crop_params,
+            pad_params,
+            rows,
+            cols,
+            result_rows,
+            result_cols,
+            self.keep_size,
+        )
 
     def apply_to_keypoint(
         self,
@@ -184,7 +209,14 @@ class CropAndPad(DualTransform):
         **params,
     ) -> Sequence[float]:
         return F.crop_and_pad_keypoint(
-            keypoint, crop_params, pad_params, rows, cols, result_rows, result_cols, self.keep_size
+            keypoint,
+            crop_params,
+            pad_params,
+            rows,
+            cols,
+            result_rows,
+            result_cols,
+            self.keep_size,
         )
 
     @property
@@ -314,15 +346,3 @@ class CropAndPad(DualTransform):
             return random.uniform(a, b)
 
         return random.choice(pad_value)
-
-    def get_transform_init_args_names(self) -> Tuple[str, ...]:
-        return (
-            "px",
-            "percent",
-            "pad_mode",
-            "pad_cval",
-            "pad_cval_mask",
-            "keep_size",
-            "sample_independently",
-            "interpolation",
-        )

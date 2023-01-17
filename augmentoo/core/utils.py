@@ -2,9 +2,7 @@ from __future__ import absolute_import
 
 from abc import ABCMeta, abstractmethod
 
-__all__ = [
-    "format_args","Params","DataProcessor"
-]
+__all__ = ["format_args", "Params", "DataProcessor"]
 
 
 def format_args(args_dict):

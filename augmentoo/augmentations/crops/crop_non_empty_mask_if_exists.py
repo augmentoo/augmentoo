@@ -28,7 +28,15 @@ class CropNonEmptyMaskIfExists(DualTransform):
         uint8, float32
     """
 
-    def __init__(self, height, width, ignore_values=None, ignore_channels=None, always_apply=False, p=1.0):
+    def __init__(
+        self,
+        height,
+        width,
+        ignore_values=None,
+        ignore_channels=None,
+        always_apply=False,
+        p=1.0,
+    ):
         super(CropNonEmptyMaskIfExists, self).__init__(always_apply, p)
 
         if ignore_values is not None and not isinstance(ignore_values, typing.Iterable):
@@ -46,7 +54,13 @@ class CropNonEmptyMaskIfExists(DualTransform):
 
     def apply_to_bbox(self, bbox, x_min=0, x_max=0, y_min=0, y_max=0, **params):
         return F.bbox_crop(
-            bbox, x_min=x_min, x_max=x_max, y_min=y_min, y_max=y_max, rows=params["rows"], cols=params["cols"]
+            bbox,
+            x_min=x_min,
+            x_max=x_max,
+            y_min=y_min,
+            y_max=y_max,
+            rows=params["rows"],
+            cols=params["cols"],
         )
 
     def apply_to_keypoint(self, keypoint, x_min=0, x_max=0, y_min=0, y_max=0, **params):
@@ -103,6 +117,3 @@ class CropNonEmptyMaskIfExists(DualTransform):
 
         params.update({"x_min": x_min, "x_max": x_max, "y_min": y_min, "y_max": y_max})
         return params
-
-    def get_transform_init_args_names(self):
-        return ("height", "width", "ignore_values", "ignore_channels")

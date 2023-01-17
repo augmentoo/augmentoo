@@ -123,11 +123,3 @@ class RandomShadow(ImageOnlyTransform):
             vertices_list.append(vertices)
 
         return {"vertices_list": vertices_list}
-
-    def get_transform_init_args_names(self):
-        return (
-            "shadow_roi",
-            "num_shadows_lower",
-            "num_shadows_upper",
-            "shadow_dimension",
-        )

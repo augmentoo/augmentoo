@@ -71,6 +71,3 @@ class Transpose(DualTransform):
 
     def apply_to_keypoint(self, keypoint, **params):
         return F.keypoint_transpose(keypoint)
-
-    def get_transform_init_args_names(self):
-        return ()

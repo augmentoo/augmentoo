@@ -37,6 +37,3 @@ class CenterCrop(DualTransform):
 
     def apply_to_keypoint(self, keypoint, **params):
         return F.keypoint_center_crop(keypoint, self.height, self.width, **params)
-
-    def get_transform_init_args_names(self):
-        return ("height", "width")

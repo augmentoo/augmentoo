@@ -140,16 +140,3 @@ class GridDropout(DualTransform):
     @property
     def targets_as_params(self):
         return ["image"]
-
-    def get_transform_init_args_names(self):
-        return (
-            "ratio",
-            "unit_size_min",
-            "unit_size_max",
-            "holes_number_x",
-            "holes_number_y",
-            "shift_x",
-            "shift_y",
-            "mask_fill_value",
-            "random_offset",
-        )

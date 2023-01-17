@@ -100,6 +100,3 @@ class RandomRotate90(DualTransform):
 
     def apply_to_keypoint(self, keypoint, factor=0, **params):
         return keypoint_rot90(keypoint, factor, **params)
-
-    def get_transform_init_args_names(self):
-        return ()

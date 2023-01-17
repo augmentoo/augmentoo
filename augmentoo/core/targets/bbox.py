@@ -1,6 +1,7 @@
 from __future__ import division
 
 from dataclasses import dataclass
+from enum import Enum
 from typing import Optional, List, Union
 
 import numpy as np
@@ -9,6 +10,8 @@ from augmentoo.core.targets.abstract_target import AbstractTarget
 from augmentoo.core.utils import DataProcessor
 
 __all__ = [
+    "BoundingBoxFormat",
+    "AxisAlignedBoxTarget",
     "normalize_bbox",
     "denormalize_bbox",
     "normalize_bboxes",
@@ -46,7 +49,11 @@ class BboxProcessor(DataProcessor):
 
     def filter(self, data, rows, cols):
         return filter_bboxes(
-            data, rows, cols, min_area=self.params.min_area, min_visibility=self.params.min_visibility
+            data,
+            rows,
+            cols,
+            min_area=self.params.min_area,
+            min_visibility=self.params.min_visibility,
         )
 
     def check(self, data, rows, cols):
@@ -166,7 +173,12 @@ def calculate_bbox_area(bbox, rows, cols):
 
 
 def filter_bboxes_by_visibility(
-    original_shape, bboxes, transformed_shape, transformed_bboxes, threshold=0.0, min_area=0.0
+    original_shape,
+    bboxes,
+    transformed_shape,
+    transformed_bboxes,
+    threshold=0.0,
+    min_area=0.0,
 ):
     """Filter bounding boxes and return only those boxes whose visibility after transformation is above
     the threshold and minimal area of bounding box in pixels is more than min_areA2.
@@ -384,12 +396,20 @@ def filter_bboxes(bboxes, rows, cols, min_area=0.0, min_visibility=0.0):
     return resulting_boxes
 
 
+class BoundingBoxFormat(Enum):
+    """Enum class for bounding box formats"""
+
+    XYXY = PASCAL_VOC = "XYXY"
+    XYWH = COCO = "XYWH"
+    CXCYWH = YOLO = "CXCYWH"
+
+
 @dataclass
 class AxisAlignedBoxTarget(AbstractTarget):
     """ """
 
-    format: str = "xywh"
-    output_format: Optional[str] = None
+    input_format: BoundingBoxFormat
+    output_format: Optional[BoundingBoxFormat] = None
 
     def validate_input(self, value: Union[np.ndarray, List]):
         value = np.asarray(value)

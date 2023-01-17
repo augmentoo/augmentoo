@@ -97,6 +97,3 @@ class RandomSnow(ImageOnlyTransform):
 
     def get_params(self):
         return {"snow_point": random.uniform(self.snow_point_lower, self.snow_point_upper)}
-
-    def get_transform_init_args_names(self):
-        return ("snow_point_lower", "snow_point_upper", "brightness_coeff")

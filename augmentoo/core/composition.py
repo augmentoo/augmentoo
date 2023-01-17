@@ -8,14 +8,9 @@ import numpy as np
 
 import warnings
 from augmentoo.random import random_utils
-from augmentoo.core.serialization import (
-    SERIALIZABLE_REGISTRY,
-    SerializableMeta,
-    get_shortest_class_fullname,
-    instantiate_nonserializable,
-)
+
 from augmentoo.core.transforms_interface import BasicTransform
-from augmentoo.core.utils import Params, format_args, get_shape
+from augmentoo.core.utils import Params, format_args
 
 __all__ = [
     "BaseCompose",
@@ -45,7 +40,7 @@ def get_always_apply(transforms: typing.Union["BaseCompose", TransformsSeqType])
     return new_transforms
 
 
-class BaseCompose(metaclass=SerializableMeta):
+class BaseCompose:
     def __init__(self, transforms: TransformsSeqType, p: float):
         if isinstance(transforms, (BaseCompose, BasicTransform)):
             warnings.warn(
@@ -334,7 +329,12 @@ class SomeOf(BaseCompose):
             return data
 
         if self.transforms_ps and (force_apply or random.random() < self.p):
-            idx = random_utils.choice(len(self.transforms), size=self.n, replace=self.replace, p=self.transforms_ps)
+            idx = random_utils.choice(
+                len(self.transforms),
+                size=self.n,
+                replace=self.replace,
+                p=self.transforms_ps,
+            )
             for i in idx:  # type: ignore
                 t = self.transforms[i]
                 data = t(force_apply=True, **data)
@@ -387,7 +387,10 @@ class PerChannel(BaseCompose):
     """
 
     def __init__(
-        self, transforms: TransformsSeqType, channels: typing.Optional[typing.Sequence[int]] = None, p: float = 0.5
+        self,
+        transforms: TransformsSeqType,
+        channels: typing.Optional[typing.Sequence[int]] = None,
+        p: float = 0.5,
     ):
         super(PerChannel, self).__init__(transforms, p)
         self.channels = channels
@@ -443,7 +446,8 @@ class ReplayCompose(Compose):
 
     @staticmethod
     def _restore_for_replay(
-        transform_dict: typing.Dict[str, typing.Any], lambda_transforms: typing.Optional[dict] = None
+        transform_dict: typing.Dict[str, typing.Any],
+        lambda_transforms: typing.Optional[dict] = None,
     ) -> TransformType:
         """
         Args:

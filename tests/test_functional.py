@@ -5,7 +5,6 @@ import numpy as np
 import pytest
 from numpy.testing import assert_array_almost_equal_nulp
 
-import albumentations as A
 import augmentoo.augmentations.functional as F
 import augmentoo.augmentations.geometric.functional as FGeometric
 from augmentoo.augmentations.bbox_utils import filter_bboxes

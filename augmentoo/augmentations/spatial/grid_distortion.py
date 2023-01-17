@@ -131,13 +131,3 @@ class GridDistortion(DualTransform):
         stepsx = [1 + random.uniform(self.distort_limit[0], self.distort_limit[1]) for i in range(self.num_steps + 1)]
         stepsy = [1 + random.uniform(self.distort_limit[0], self.distort_limit[1]) for i in range(self.num_steps + 1)]
         return {"stepsx": stepsx, "stepsy": stepsy}
-
-    def get_transform_init_args_names(self):
-        return (
-            "num_steps",
-            "distort_limit",
-            "interpolation",
-            "border_mode",
-            "value",
-            "mask_value",
-        )

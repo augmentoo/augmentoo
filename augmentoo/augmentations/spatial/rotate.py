@@ -13,12 +13,23 @@ __all__ = ["Rotate"]
 
 
 @preserve_channel_dim
-def rotate(img: np.ndarray, angle, interpolation=cv2.INTER_LINEAR, border_mode=cv2.BORDER_REFLECT_101, value=None):
+def rotate(
+    img: np.ndarray,
+    angle,
+    interpolation=cv2.INTER_LINEAR,
+    border_mode=cv2.BORDER_REFLECT_101,
+    value=None,
+):
     height, width = img.shape[:2]
     matrix = cv2.getRotationMatrix2D((width / 2, height / 2), angle, 1.0)
 
     warp_fn = _maybe_process_in_chunks(
-        cv2.warpAffine, M=matrix, dsize=(width, height), flags=interpolation, borderMode=border_mode, borderValue=value
+        cv2.warpAffine,
+        M=matrix,
+        dsize=(width, height),
+        flags=interpolation,
+        borderMode=border_mode,
+        borderValue=value,
     )
     return warp_fn(img)
 
@@ -128,6 +139,3 @@ class Rotate(DualTransform):
 
     def apply_to_keypoint(self, keypoint, angle=0, **params):
         return F.keypoint_rotate(keypoint, angle, **params)
-
-    def get_transform_init_args_names(self):
-        return ("limit", "interpolation", "border_mode", "value", "mask_value")

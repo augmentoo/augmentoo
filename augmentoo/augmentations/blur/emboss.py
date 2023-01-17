@@ -56,6 +56,3 @@ class Emboss(ImageOnlyTransform):
 
     def apply(self, img, emboss_matrix=None, **params):
         return convolve(img, emboss_matrix)
-
-    def get_transform_init_args_names(self):
-        return ("alpha", "strength")

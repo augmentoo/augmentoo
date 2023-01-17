@@ -53,6 +53,3 @@ class Sharpen(ImageOnlyTransform):
 
     def apply(self, img, sharpening_matrix=None, **params):
         return ImageTarget.convolve(img, sharpening_matrix)
-
-    def get_transform_init_args_names(self):
-        return ("alpha", "lightness")

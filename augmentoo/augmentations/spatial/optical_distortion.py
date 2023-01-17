@@ -95,13 +95,3 @@ class OpticalDistortion(DualTransform):
             "dx": round(random.uniform(self.shift_limit[0], self.shift_limit[1])),
             "dy": round(random.uniform(self.shift_limit[0], self.shift_limit[1])),
         }
-
-    def get_transform_init_args_names(self):
-        return (
-            "distort_limit",
-            "shift_limit",
-            "interpolation",
-            "border_mode",
-            "value",
-            "mask_value",
-        )

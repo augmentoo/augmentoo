@@ -130,6 +130,3 @@ class HueSaturationValue(ImageOnlyTransform):
             "sat_shift": random.uniform(self.sat_shift_limit[0], self.sat_shift_limit[1]),
             "val_shift": random.uniform(self.val_shift_limit[0], self.val_shift_limit[1]),
         }
-
-    def get_transform_init_args_names(self):
-        return ("hue_shift_limit", "sat_shift_limit", "val_shift_limit")

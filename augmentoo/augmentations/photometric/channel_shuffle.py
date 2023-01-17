@@ -38,6 +38,3 @@ class ChannelShuffle(ImageOnlyTransform):
         ch_arr = list(range(img.shape[2]))
         random.shuffle(ch_arr)
         return {"channels_shuffled": ch_arr}
-
-    def get_transform_init_args_names(self):
-        return ()

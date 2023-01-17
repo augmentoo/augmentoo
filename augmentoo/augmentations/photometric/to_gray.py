@@ -33,6 +33,3 @@ class ToGray(ImageOnlyTransform):
             raise TypeError("ToGray transformation expects 3-channel images.")
 
         return F.to_gray(img)
-
-    def get_transform_init_args_names(self):
-        return ()

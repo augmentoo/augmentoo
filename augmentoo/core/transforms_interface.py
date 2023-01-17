@@ -14,7 +14,14 @@ import warnings
 from augmentoo.core.targets.abstract_target import AbstractTarget
 from augmentoo.core.utils import format_args
 
-__all__ = ["to_tuple", "BasicTransform", "DualTransform", "ImageOnlyTransform", "NoOp", "AbstractTransform"]
+__all__ = [
+    "to_tuple",
+    "BasicTransform",
+    "DualTransform",
+    "ImageOnlyTransform",
+    "NoOp",
+    "AbstractTransform",
+]
 
 
 def to_tuple(param, low=None, bias=None):
@@ -51,7 +58,9 @@ def to_tuple(param, low=None, bias=None):
 class AbstractTransform:
     @abstractmethod
     def __call__(
-        self, data: typing.Mapping[str, Any], targets: typing.Mapping[str, AbstractTarget]
+        self,
+        data: typing.Mapping[str, Any],
+        targets: typing.Mapping[str, AbstractTarget],
     ) -> typing.Mapping[str, Any]:
         pass
 
@@ -194,29 +203,6 @@ class BasicTransform:
     def is_serializable(cls):
         return True
 
-    def get_transform_init_args_names(self) -> Tuple[str, ...]:
-        raise NotImplementedError(
-            "Class {name} is not serializable because the `get_transform_init_args_names` method is not "
-            "implemented".format(name=self.get_class_fullname())
-        )
-
-    def get_base_init_args(self) -> Dict[str, Any]:
-        return {"always_apply": self.always_apply, "p": self.p}
-
-    def get_transform_init_args(self) -> Dict[str, Any]:
-        return {k: getattr(self, k) for k in self.get_transform_init_args_names()}
-
-    def _to_dict(self) -> Dict[str, Any]:
-        state = {"__class_fullname__": self.get_class_fullname()}
-        state.update(self.get_base_init_args())
-        state.update(self.get_transform_init_args())
-        return state
-
-    def get_dict_with_id(self) -> Dict[str, Any]:
-        d = self._to_dict()
-        d["id"] = id(self)
-        return d
-
 
 class DualTransform(BasicTransform):
     """Transform for segmentation task."""
@@ -272,6 +258,3 @@ class NoOp(DualTransform):
 
     def apply_to_mask(self, img, **params):
         return img
-
-    def get_transform_init_args_names(self):
-        return ()

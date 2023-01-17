@@ -91,7 +91,12 @@ def keypoint_safe_rotate(keypoint, angle, rows, cols):
     row_diff = int(np.ceil(abs(new_rows - old_rows) / 2))
 
     # Shift keypoint
-    shifted_keypoint = (keypoint[0] + col_diff, keypoint[1] + row_diff, keypoint[2], keypoint[3])
+    shifted_keypoint = (
+        keypoint[0] + col_diff,
+        keypoint[1] + row_diff,
+        keypoint[2],
+        keypoint[3],
+    )
 
     # Rotate keypoint
     rotated_keypoint = keypoint_rotate(shifted_keypoint, angle, rows=new_rows, cols=new_cols)
@@ -168,12 +173,20 @@ class SafeRotate(DualTransform):
 
     def apply(self, img, angle=0, interpolation=cv2.INTER_LINEAR, **params):
         return image_safe_rotate(
-            img=img, value=self.value, angle=angle, interpolation=interpolation, border_mode=self.border_mode
+            img=img,
+            value=self.value,
+            angle=angle,
+            interpolation=interpolation,
+            border_mode=self.border_mode,
         )
 
     def apply_to_mask(self, img, angle=0, **params):
         return image_safe_rotate(
-            img=img, value=self.mask_value, angle=angle, interpolation=cv2.INTER_NEAREST, border_mode=self.border_mode
+            img=img,
+            value=self.mask_value,
+            angle=angle,
+            interpolation=cv2.INTER_NEAREST,
+            border_mode=self.border_mode,
         )
 
     def get_params(self):
@@ -184,6 +197,3 @@ class SafeRotate(DualTransform):
 
     def apply_to_keypoint(self, keypoint, angle=0, **params):
         return keypoint_safe_rotate(keypoint, angle=angle, rows=params["rows"], cols=params["cols"])
-
-    def get_transform_init_args_names(self):
-        return ("limit", "interpolation", "border_mode", "value", "mask_value")

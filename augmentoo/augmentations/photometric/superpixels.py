@@ -16,7 +16,11 @@ from augmentoo.core.transforms_interface import (
 
 @preserve_shape
 def superpixels(
-    image: np.ndarray, n_segments: int, replace_samples: Sequence[bool], max_size: Optional[int], interpolation: int
+    image: np.ndarray,
+    n_segments: int,
+    replace_samples: Sequence[bool],
+    max_size: Optional[int],
+    interpolation: int,
 ) -> np.ndarray:
     if not np.any(replace_samples):
         return image
@@ -63,7 +67,9 @@ def superpixels(
 
     if orig_shape != image.shape:
         resize_fn = maybe_process_in_chunks(
-            cv2.resize, dsize=(orig_shape[1], orig_shape[0]), interpolation=interpolation
+            cv2.resize,
+            dsize=(orig_shape[1], orig_shape[0]),
+            interpolation=interpolation,
         )
         image = resize_fn(image)
 
@@ -131,13 +137,19 @@ class Superpixels(ImageOnlyTransform):
         if min(self.n_segments) < 1:
             raise ValueError(f"n_segments must be >= 1. Got: {n_segments}")
 
-    def get_transform_init_args_names(self) -> Tuple[str, str, str, str]:
-        return ("p_replace", "n_segments", "max_size", "interpolation")
-
     def get_params(self) -> dict:
         n_segments = random.randint(*self.n_segments)
         p = random.uniform(*self.p_replace)
-        return {"replace_samples": random_utils.random(n_segments) < p, "n_segments": n_segments}
+        return {
+            "replace_samples": random_utils.random(n_segments) < p,
+            "n_segments": n_segments,
+        }
 
-    def apply(self, img: np.ndarray, replace_samples: Sequence[bool] = (False,), n_segments: int = 1, **kwargs):
+    def apply(
+        self,
+        img: np.ndarray,
+        replace_samples: Sequence[bool] = (False,),
+        n_segments: int = 1,
+        **kwargs,
+    ):
         return F.superpixels(img, n_segments, replace_samples, self.max_size, self.interpolation)

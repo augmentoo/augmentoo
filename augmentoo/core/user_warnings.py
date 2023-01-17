@@ -1,6 +1,10 @@
 import numpy as np
 
-from augmentoo.core.targets.image import is_rgb_image, is_grayscale_image, is_multispectral_image
+from augmentoo.core.targets.image import (
+    is_rgb_image,
+    is_grayscale_image,
+    is_multispectral_image,
+)
 
 __all__ = ["non_rgb_warning"]
 

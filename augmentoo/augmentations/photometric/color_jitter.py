@@ -190,6 +190,3 @@ class ColorJitter(ImageOnlyTransform):
         for transform in transforms:
             img = transform(img)
         return img
-
-    def get_transform_init_args_names(self):
-        return ("brightness", "contrast", "saturation", "hue")

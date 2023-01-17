@@ -29,7 +29,12 @@ def shift_scale_rotate(
     matrix[1, 2] += dy * height
 
     warp_affine_fn = _maybe_process_in_chunks(
-        cv2.warpAffine, M=matrix, dsize=(width, height), flags=interpolation, borderMode=border_mode, borderValue=value
+        cv2.warpAffine,
+        M=matrix,
+        dsize=(width, height),
+        flags=interpolation,
+        borderMode=border_mode,
+        borderValue=value,
     )
     return warp_affine_fn(img)
 
@@ -144,7 +149,16 @@ class ShiftScaleRotate(DualTransform):
         return shift_scale_rotate(img, angle, scale, dx, dy, interpolation, self.border_mode, self.value)
 
     def apply_to_mask(self, img, angle=0, scale=0, dx=0, dy=0, **params):
-        return shift_scale_rotate(img, angle, scale, dx, dy, cv2.INTER_NEAREST, self.border_mode, self.mask_value)
+        return shift_scale_rotate(
+            img,
+            angle,
+            scale,
+            dx,
+            dy,
+            cv2.INTER_NEAREST,
+            self.border_mode,
+            self.mask_value,
+        )
 
     def apply_to_keypoint(self, keypoint, angle=0, scale=0, dx=0, dy=0, rows=0, cols=0, **params):
         return keypoint_shift_scale_rotate(keypoint, angle, scale, dx, dy, rows, cols)

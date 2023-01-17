@@ -170,6 +170,3 @@ class Equalize(ImageOnlyTransform):
     @property
     def targets_as_params(self):
         return ["image"] + list(self.mask_params)
-
-    def get_transform_init_args_names(self):
-        return ("mode", "by_channels")

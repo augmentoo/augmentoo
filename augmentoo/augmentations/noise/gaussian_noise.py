@@ -32,7 +32,14 @@ class GaussNoise(ImageOnlyTransform):
         uint8, float32
     """
 
-    def __init__(self, var_limit=(10.0, 50.0), mean=0, per_channel=True, always_apply=False, p=0.5):
+    def __init__(
+        self,
+        var_limit=(10.0, 50.0),
+        mean=0,
+        per_channel=True,
+        always_apply=False,
+        p=0.5,
+    ):
         super(GaussNoise, self).__init__(always_apply, p)
         if isinstance(var_limit, typing.Iterable) and not isinstance(var_limit, typing.Mapping):
             if var_limit[0] < 0:
@@ -73,6 +80,3 @@ class GaussNoise(ImageOnlyTransform):
     @property
     def targets_as_params(self):
         return ["image"]
-
-    def get_transform_init_args_names(self):
-        return ("var_limit", "per_channel", "mean")

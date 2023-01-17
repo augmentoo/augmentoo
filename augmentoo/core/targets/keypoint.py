@@ -2,6 +2,7 @@ from __future__ import division
 
 import math
 from dataclasses import dataclass
+from enum import Enum
 
 from augmentoo.core.decorators import angle_to_2pi_range
 from augmentoo.core.utils import DataProcessor
@@ -12,6 +13,7 @@ __all__ = [
     "convert_keypoints_to_albumentations",
     "filter_keypoints",
     "KeypointsProcessor",
+    "KeypointTarget",
 ]
 
 keypoint_formats = {"xy", "yx", "xya", "xys", "xyas", "xysa"}
@@ -179,10 +181,19 @@ def convert_keypoints_from_albumentations(
     ]
 
 
+class KeypointFormat(Enum):
+    """Keypoint format"""
+
+    XY = "XY"
+    XY_ANGLE = "XYA"
+    XY_DIAMETER = "XYS"
+    XY_DIAMETER_ANGLE = "XYSA"
+
+
 @dataclass
 class KeypointTarget:
     remove_invisible: bool = True
-    
+
     @angle_2pi_range
     def keypoint_hflip(keypoint, rows, cols):
         """Flip a keypoint horizontally around the y-axis.

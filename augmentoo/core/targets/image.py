@@ -1,8 +1,8 @@
-import numbers
 from dataclasses import dataclass
+from enum import Enum
 from functools import wraps
-from typing import Tuple, Optional
-
+from typing import Tuple, Optional, Union
+from numbers import Number
 import cv2
 import numpy as np
 
@@ -26,6 +26,11 @@ def read_rgb_image(path: str) -> np.ndarray:
     return cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
 
+class ImageTargetChannelOrder(Enum):
+    HWC = "HWC"
+    CHW = "CHW"
+
+
 @dataclass
 class ImageTarget(AbstractTarget):
     """
@@ -34,23 +39,35 @@ class ImageTarget(AbstractTarget):
 
     """
 
-    # Specifies dtype of the input image. If the input dtype is set, will raise an exception if actual dtype.
-    # does not match the expected dtype
+    # Specifies dtype of the input image.
+    # If not None, will raise an exception if actual dtype does not match the input_dtype.
     input_dtype: Optional[np.dtype] = None
 
+    input_channel_order: ImageTargetChannelOrder = ImageTargetChannelOrder.HWC
+
+    # Specifies dtype for intermediate buffers for given target.
     intermediate_dtype: Optional[np.ndtype] = None
 
-    # Specifies dtype of the output image. If set, will saturate cast the result image to the desired dtype.
+    # Specifies dtype of the output image.
+    # If set, will convert intermediate buffer to the desired dtype with optional saturation cast (clipping).
     output_dtype: Optional[np.ndtype] = None
+
+    # If True, guarantees that the output image is a contiguous array.
     output_ensure_contiguous: bool = False
+
+    # If True, guarantees that the output image will have a dummy channel dimension (with respect to channel_order)
     output_dummy_channel_dim: bool = True
 
-    data_range: Tuple[numbers.Number, numbers.Number] = None
-    channel_order: str = "HWC"
+    output_min_value: Union[Number, None] = None
+    output_max_value: Union[Number, None] = None
 
-    pad_value: int = 0
+    output_channel_order: ImageTargetChannelOrder = ImageTargetChannelOrder.HWC
+
+    # Padding value & mode
+    pad_value: Union[int, float, Tuple[int, ...], Tuple[float, ...]] = 0
     pad_mode: int = cv2.BORDER_CONSTANT
 
+    # Used pixel interpolation mode
     interpolation = cv2.INTER_LINEAR
 
     def validate_input(self, img: np.ndarray):
@@ -71,26 +88,38 @@ class ImageTarget(AbstractTarget):
 
     def postprocess_result(self, img: np.ndarray) -> np.ndarray:
         if self.output_dtype is not None and self.output_dtype != img.dtype:
+            minval = self.output_min_value or MIN_VALUES_BY_DTYPE.get(self.output_dtype, None)
+            maxval = self.output_max_value or MAX_VALUES_BY_DTYPE.get(self.output_dtype, None)
+
             img = self.clip(
                 img,
                 self.output_dtype,
-                minval=MIN_VALUES_BY_DTYPE[self.output_dtype],
-                maxval=MAX_VALUES_BY_DTYPE[self.output_dtype],
+                minval=minval,
+                maxval=maxval,
             )
+
         if self.output_ensure_contiguous:
             img = np.ascontiguousarray(img)
 
         if self.output_dummy_channel_dim and len(img.shape) == 2:
-            img = np.expand_dims(img, axis=-1)
+            if self.output_channel_order == ImageTargetChannelOrder.HWC:
+                img = np.expand_dims(img, axis=-1)
+            elif self.output_channel_order == ImageTargetChannelOrder.CHW:
+                img = np.expand_dims(img, axis=0)
+            else:
+                raise RuntimeError(f"Unknown channel order {self.output_channel_order}")
+
         return img
 
     @classmethod
     def clip(cls, img: np.ndarray, dtype, minval, maxval) -> np.ndarray:
-        return np.clip(img, minval, maxval).astype(dtype, copy=False)
+        if minval is not None and maxval is not None:
+            img = np.clip(img, minval, maxval, out=img)
+        return img.astype(dtype, copy=False)
 
     @classmethod
     @preserve_channel_dim
-    def resize(cls, img: np.ndarray, height: int, width: int, interpolation=cv2.INTER_LINEAR):
+    def resize(cls, img: np.ndarray, height: int, width: int, interpolation: int):
         img_height, img_width = img.shape[:2]
         if height == img_height and width == img_width:
             return img
@@ -99,7 +128,7 @@ class ImageTarget(AbstractTarget):
 
     @classmethod
     @preserve_shape
-    def convolve(cls, img: np.ndarray, kernel: np.ndarray, border_type=cv2.BORDER_CONSTANT) -> np.ndarray:
+    def convolve(cls, img: np.ndarray, kernel: np.ndarray, border_type: int) -> np.ndarray:
         conv_fn = cls.maybe_process_in_chunks(cv2.filter2D, ddepth=-1, kernel=kernel, borderType=border_type)
         return conv_fn(img)
 

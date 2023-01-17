@@ -67,7 +67,11 @@ class PixelDropout(DualTransform):
             raise ValueError("PixelDropout supports mask only with per_channel=False")
 
     def apply(
-        self, img: np.ndarray, drop_mask: np.ndarray = None, drop_value: Union[float, Sequence[float]] = None, **params
+        self,
+        img: np.ndarray,
+        drop_mask: np.ndarray = None,
+        drop_value: Union[float, Sequence[float]] = None,
+        **params,
     ) -> np.ndarray:
         return pixel_dropout(img, drop_mask, drop_value)
 
@@ -114,6 +118,3 @@ class PixelDropout(DualTransform):
     @property
     def targets_as_params(self) -> List[str]:
         return ["image"]
-
-    def get_transform_init_args_names(self) -> Tuple[str, str, str, str]:
-        return ("dropout_prob", "per_channel", "drop_value", "mask_drop_value")

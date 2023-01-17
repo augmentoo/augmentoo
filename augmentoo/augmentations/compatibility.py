@@ -35,9 +35,6 @@ class ToFloat(ImageOnlyTransform):
     def apply(self, img, **params):
         return F.to_float(img, self.max_value)
 
-    def get_transform_init_args_names(self):
-        return ("max_value",)
-
 
 class FromFloat(ImageOnlyTransform):
     """Take an input array where all values should lie in the range [0, 1.0], multiply them by `max_value` and then

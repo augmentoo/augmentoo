@@ -128,6 +128,3 @@ class RandomFog(ImageOnlyTransform):
             index += 1
 
         return {"haze_list": haze_list, "fog_coef": fog_coef}
-
-    def get_transform_init_args_names(self):
-        return ("fog_coef_lower", "fog_coef_upper", "alpha_coef")

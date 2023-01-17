@@ -96,6 +96,3 @@ class Posterize(ImageOnlyTransform):
         if len(self.num_bits) == 3:
             return {"num_bits": [random.randint(i[0], i[1]) for i in self.num_bits]}
         return {"num_bits": random.randint(self.num_bits[0], self.num_bits[1])}
-
-    def get_transform_init_args_names(self):
-        return ("num_bits",)

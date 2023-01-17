@@ -101,9 +101,6 @@ class GlassBlur(Blur):
 
         return {"dxy": dxy}
 
-    def get_transform_init_args_names(self):
-        return ("sigma", "max_delta", "iterations")
-
     @property
     def targets_as_params(self):
         return ["image"]

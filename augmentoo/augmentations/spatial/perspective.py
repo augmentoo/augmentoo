@@ -55,7 +55,15 @@ def perspective_bbox(
 
     x1, y1, x2, y2 = float("inf"), float("inf"), 0, 0
     for pt in points:
-        pt = perspective_keypoint(pt.tolist() + [0, 0], height, width, matrix, max_width, max_height, keep_size)
+        pt = perspective_keypoint(
+            pt.tolist() + [0, 0],
+            height,
+            width,
+            matrix,
+            max_width,
+            max_height,
+            keep_size,
+        )
         x, y = pt[:2]
         x = np.clip(x, 0, width if keep_size else max_width)
         y = np.clip(y, 0, height if keep_size else max_height)
@@ -67,7 +75,9 @@ def perspective_bbox(
     x = np.clip([x1, x2], 0, width if keep_size else max_width)
     y = np.clip([y1, y2], 0, height if keep_size else max_height)
     return normalize_bbox(
-        (x[0], y[0], x[1], y[1]), height if keep_size else max_height, width if keep_size else max_width
+        (x[0], y[0], x[1], y[1]),
+        height if keep_size else max_height,
+        width if keep_size else max_width,
     )
 
 
@@ -156,15 +166,36 @@ class Perspective(DualTransform):
 
     def apply(self, img, matrix=None, max_height=None, max_width=None, **params):
         return perspective(
-            img, matrix, max_width, max_height, self.pad_val, self.pad_mode, self.keep_size, params["interpolation"]
+            img,
+            matrix,
+            max_width,
+            max_height,
+            self.pad_val,
+            self.pad_mode,
+            self.keep_size,
+            params["interpolation"],
         )
 
     def apply_to_bbox(self, bbox, matrix=None, max_height=None, max_width=None, **params):
-        return perspective_bbox(bbox, params["rows"], params["cols"], matrix, max_width, max_height, self.keep_size)
+        return perspective_bbox(
+            bbox,
+            params["rows"],
+            params["cols"],
+            matrix,
+            max_width,
+            max_height,
+            self.keep_size,
+        )
 
     def apply_to_keypoint(self, keypoint, matrix=None, max_height=None, max_width=None, **params):
         return perspective_keypoint(
-            keypoint, params["rows"], params["cols"], matrix, max_width, max_height, self.keep_size
+            keypoint,
+            params["rows"],
+            params["cols"],
+            matrix,
+            max_width,
+            max_height,
+            self.keep_size,
         )
 
     @property
@@ -234,7 +265,10 @@ class Perspective(DualTransform):
         # in the top-left, top-right, bottom-right, and bottom-left order
         # do not use width-1 or height-1 here, as for e.g. width=3, height=2
         # the bottom right coordinate is at (3.0, 2.0) and not (2.0, 1.0)
-        dst = np.array([[0, 0], [max_width, 0], [max_width, max_height], [0, max_height]], dtype=np.float32)
+        dst = np.array(
+            [[0, 0], [max_width, 0], [max_width, max_height], [0, max_height]],
+            dtype=np.float32,
+        )
 
         # compute the perspective transform matrix and then apply it
         m = cv2.getPerspectiveTransform(points, dst)
@@ -242,7 +276,12 @@ class Perspective(DualTransform):
         if self.fit_output:
             m, max_width, max_height = self._expand_transform(m, (h, w))
 
-        return {"matrix": m, "max_height": max_height, "max_width": max_width, "interpolation": self.interpolation}
+        return {
+            "matrix": m,
+            "max_height": max_height,
+            "max_width": max_width,
+            "interpolation": self.interpolation,
+        }
 
     @classmethod
     def _expand_transform(cls, matrix, shape):
@@ -278,6 +317,3 @@ class Perspective(DualTransform):
             br, tr = right
 
         return np.array([tl, tr, br, bl], dtype=np.float32)
-
-    def get_transform_init_args_names(self):
-        return ("scale", "keep_size", "pad_mode", "pad_val", "mask_pad_val", "fit_output", "interpolation")

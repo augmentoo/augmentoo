@@ -14,9 +14,17 @@ __all__ = ["unsharp_mask", "UnsharpMask"]
 
 @clipped
 @preserve_shape
-def unsharp_mask(image: np.ndarray, ksize: int, sigma: float = 0.0, alpha: float = 0.2, threshold: int = 10):
+def unsharp_mask(
+    image: np.ndarray,
+    ksize: int,
+    sigma: float = 0.0,
+    alpha: float = 0.2,
+    threshold: int = 10,
+):
     blur_fn = _maybe_process_in_chunks(
-        augmentoo.augmentations.blur.gaussian.GaussianBlur, ksize=(ksize, ksize), sigmaX=sigma
+        augmentoo.augmentations.blur.gaussian.GaussianBlur,
+        ksize=(ksize, ksize),
+        sigmaX=sigma,
     )
 
     input_dtype = image.dtype
@@ -108,6 +116,3 @@ class UnsharpMask(ImageOnlyTransform):
 
     def apply(self, img, ksize=3, sigma=0, alpha=0.2, **params):
         return F.unsharp_mask(img, ksize, sigma=sigma, alpha=alpha, threshold=self.threshold)
-
-    def get_transform_init_args_names(self):
-        return ("blur_limit", "sigma_limit", "alpha", "threshold")

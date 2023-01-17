@@ -30,7 +30,15 @@ class RandomSizedBBoxSafeCrop(DualTransform):
         uint8, float32
     """
 
-    def __init__(self, height, width, erosion_rate=0.0, interpolation=cv2.INTER_LINEAR, always_apply=False, p=1.0):
+    def __init__(
+        self,
+        height,
+        width,
+        erosion_rate=0.0,
+        interpolation=cv2.INTER_LINEAR,
+        always_apply=False,
+        p=1.0,
+    ):
         super(RandomSizedBBoxSafeCrop, self).__init__(always_apply, p)
         self.height = height
         self.width = width
@@ -54,7 +62,10 @@ class RandomSizedBBoxSafeCrop(DualTransform):
             }
         # get union of all bboxes
         x, y, x2, y2 = union_of_bboxes(
-            width=img_w, height=img_h, bboxes=params["bboxes"], erosion_rate=self.erosion_rate
+            width=img_w,
+            height=img_h,
+            bboxes=params["bboxes"],
+            erosion_rate=self.erosion_rate,
         )
         # find bigger region
         bx, by = x * random.random(), y * random.random()
@@ -64,7 +75,12 @@ class RandomSizedBBoxSafeCrop(DualTransform):
         crop_width = img_w if bw >= 1.0 else int(img_w * bw)
         h_start = np.clip(0.0 if bh >= 1.0 else by / (1.0 - bh), 0.0, 1.0)
         w_start = np.clip(0.0 if bw >= 1.0 else bx / (1.0 - bw), 0.0, 1.0)
-        return {"h_start": h_start, "w_start": w_start, "crop_height": crop_height, "crop_width": crop_width}
+        return {
+            "h_start": h_start,
+            "w_start": w_start,
+            "crop_height": crop_height,
+            "crop_width": crop_width,
+        }
 
     def apply_to_bbox(self, bbox, crop_height=0, crop_width=0, h_start=0, w_start=0, rows=0, cols=0, **params):
         return F.bbox_random_crop(bbox, crop_height, crop_width, h_start, w_start, rows, cols)
@@ -72,9 +88,6 @@ class RandomSizedBBoxSafeCrop(DualTransform):
     @property
     def targets_as_params(self):
         return ["image", "bboxes"]
-
-    def get_transform_init_args_names(self):
-        return ("height", "width", "erosion_rate", "interpolation")
 
     @classmethod
     def union_of_bboxes(cls, height, width, bboxes, erosion_rate=0.0):

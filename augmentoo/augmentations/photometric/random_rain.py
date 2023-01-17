@@ -183,15 +183,3 @@ class RandomRain(ImageOnlyTransform):
             rain_drops.append((x, y))
 
         return {"drop_length": drop_length, "rain_drops": rain_drops}
-
-    def get_transform_init_args_names(self):
-        return (
-            "slant_lower",
-            "slant_upper",
-            "drop_length",
-            "drop_width",
-            "drop_color",
-            "blur_value",
-            "brightness_coefficient",
-            "rain_type",
-        )

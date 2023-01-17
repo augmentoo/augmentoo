@@ -25,7 +25,10 @@ def is_identity_matrix(matrix: skimage.transform.ProjectiveTransform) -> bool:
 
 
 def to_distance_maps(
-    keypoints: Sequence[Sequence[float]], height: int, width: int, inverted: bool = False
+    keypoints: Sequence[Sequence[float]],
+    height: int,
+    width: int,
+    inverted: bool = False,
 ) -> np.ndarray:
     """Generate a ``(H,W,N)`` array of distance maps for ``N`` keypoints.
 

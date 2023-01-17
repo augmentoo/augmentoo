@@ -95,6 +95,3 @@ class MaskDropout(DualTransform):
         img = img.copy()
         img[dropout_mask] = self.mask_fill_value
         return img
-
-    def get_transform_init_args_names(self) -> Tuple[str, ...]:
-        return "max_objects", "image_fill_value", "mask_fill_value"

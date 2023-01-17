@@ -5,7 +5,10 @@ import numpy as np
 import skimage.transform
 
 from augmentoo import random_utils
-from augmentoo.augmentations.geometric.functional import to_distance_maps, from_distance_maps
+from augmentoo.augmentations.geometric.functional import (
+    to_distance_maps,
+    from_distance_maps,
+)
 from augmentoo.core.decorators import clipped
 from augmentoo.core.transforms_interface import DualTransform, to_tuple
 
@@ -21,7 +24,13 @@ def piecewise_affine(
     cval: float,
 ) -> np.ndarray:
     return skimage.transform.warp(
-        img, matrix, order=interpolation, mode=mode, cval=cval, preserve_range=True, output_shape=img.shape
+        img,
+        matrix,
+        order=interpolation,
+        mode=mode,
+        cval=cval,
+        preserve_range=True,
+        output_shape=img.shape,
     )
 
 
@@ -153,20 +162,6 @@ class PiecewiseAffine(DualTransform):
         self.absolute_scale = absolute_scale
         self.keypoints_threshold = keypoints_threshold
 
-    def get_transform_init_args_names(self):
-        return (
-            "scale",
-            "nb_rows",
-            "nb_cols",
-            "interpolation",
-            "mask_interpolation",
-            "cval",
-            "cval_mask",
-            "mode",
-            "absolute_scale",
-            "keypoints_threshold",
-        )
-
     @property
     def targets_as_params(self):
         return ["image"]
@@ -218,12 +213,18 @@ class PiecewiseAffine(DualTransform):
         }
 
     def apply(
-        self, img: np.ndarray, matrix: skimage.transform.PiecewiseAffineTransform = None, **params
+        self,
+        img: np.ndarray,
+        matrix: skimage.transform.PiecewiseAffineTransform = None,
+        **params,
     ) -> np.ndarray:
         return piecewise_affine(img, matrix, self.interpolation, self.mode, self.cval)
 
     def apply_to_mask(
-        self, img: np.ndarray, matrix: skimage.transform.PiecewiseAffineTransform = None, **params
+        self,
+        img: np.ndarray,
+        matrix: skimage.transform.PiecewiseAffineTransform = None,
+        **params,
     ) -> np.ndarray:
         return piecewise_affine(img, matrix, self.mask_interpolation, self.mode, self.cval_mask)
 

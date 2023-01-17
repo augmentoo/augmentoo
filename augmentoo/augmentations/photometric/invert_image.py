@@ -23,6 +23,3 @@ class InvertImg(ImageOnlyTransform):
 
     def apply(self, img, **params):
         return invert(img)
-
-    def get_transform_init_args_names(self):
-        return ()

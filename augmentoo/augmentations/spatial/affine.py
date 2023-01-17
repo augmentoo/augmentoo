@@ -27,7 +27,12 @@ def warp_affine(
 
     dsize = int(np.round(output_shape[1])), int(np.round(output_shape[0]))
     warp_fn = _maybe_process_in_chunks(
-        cv2.warpAffine, M=matrix.params[:2], dsize=dsize, flags=interpolation, borderMode=mode, borderValue=cval
+        cv2.warpAffine,
+        M=matrix.params[:2],
+        dsize=dsize,
+        flags=interpolation,
+        borderMode=mode,
+        borderValue=cval,
     )
     tmp = warp_fn(image)
     return tmp
@@ -209,21 +214,6 @@ class Affine(DualTransform):
         self.fit_output = fit_output
         self.shear = self._handle_dict_arg(shear, "shear")
 
-    def get_transform_init_args_names(self):
-        return (
-            "interpolation",
-            "mask_interpolation",
-            "cval",
-            "mode",
-            "scale",
-            "translate_percent",
-            "translate_px",
-            "rotate",
-            "fit_output",
-            "shear",
-            "cval_mask",
-        )
-
     @staticmethod
     def _handle_dict_arg(val: Union[float, Sequence[float], typing.Mapping], name: str):
         if isinstance(val, typing.Mapping):
@@ -252,7 +242,10 @@ class Affine(DualTransform):
 
         if translate_percent is not None:
             # translate by percent
-            return cls._handle_dict_arg(translate_percent, "translate_percent"), translate_px
+            return (
+                cls._handle_dict_arg(translate_percent, "translate_percent"),
+                translate_px,
+            )
 
         if translate_px is None:
             raise ValueError("translate_px is None.")

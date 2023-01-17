@@ -85,6 +85,3 @@ class ISONoise(ImageOnlyTransform):
             "intensity": random.uniform(self.intensity[0], self.intensity[1]),
             "random_state": random.randint(0, 65536),
         }
-
-    def get_transform_init_args_names(self):
-        return "intensity", "color_shift"

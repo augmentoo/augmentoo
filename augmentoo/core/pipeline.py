@@ -13,12 +13,14 @@ class Pipeline:
     >>> import augmentoo as A2
     >>>
     >>> # Simple use-case scenario, input is image, corresponding semantic mask, bounding box and facial keypoints.
+    >>>
     >>> transform = A2.Pipeline(
     >>>     targets=dict(
     >>>         image=A2.ImageTarget(interpolation="bilinear", output_dtype=np.float32),
     >>>         mask=A2.MaskTarget(interpolation="nearest", output_dummy_channel_dim=True),
-    >>>         bboxes=A2.AxisAlignedBoxTarget(input_format="xywh", output_format="yolo"),
-    >>>         keypoints=A2.KeypointTarget(semantic_labels_field="keypoints_labels",
+    >>>         bboxes=A2.AxisAlignedBoxTarget(input_format=A2.BoundingBoxFormat.XYWH, output_format=A2.BoundingBoxFormat.COCO),
+    >>>         bbox_labels=A2.LabelTarget(associated_target="bboxes")),
+    >>>         keypoints=A2.KeypointTarget(input_format=A2.KeypointFormat.XY, output_format=A2.KeypointFormat.XY)
     >>>           symmetry_group={"hflip": [("left_eye", "right_eye"), ("left_hand", "right_hand")],
     >>>                           "vflip": [("top_xxx"), ("bottom_xxx")]
     >>>                          }
@@ -44,11 +46,19 @@ class Pipeline:
     >>> )
     >>>
     >>> data = transform(image=cv2.imread("lena.jpg"), mask=cv2.imread("lena.png"))
-    
+
     """
+
     targets: Mapping[str, AbstractTarget]
 
-    def __init__(self, targets: Mapping[str, AbstractTarget], transforms: Iterable[AbstractTransform]):
+    def __init__(
+        self,
+        targets: Mapping[str, AbstractTarget],
+        transforms: Iterable[AbstractTransform],
+    ):
+        for t in targets:
+            t.validate_targets(targets)
+
         self.targets = targets
         self.transforms = transforms
 

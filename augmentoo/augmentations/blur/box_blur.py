@@ -41,6 +41,3 @@ class Blur(ImageOnlyTransform):
 
     def get_params(self):
         return {"ksize": int(random.choice(np.arange(self.blur_limit[0], self.blur_limit[1] + 1, 2)))}
-
-    def get_transform_init_args_names(self):
-        return ("blur_limit",)

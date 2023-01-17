@@ -25,14 +25,12 @@ MIN_VALUES_BY_DTYPE = {
     np.dtype("uint8"): 0,
     np.dtype("uint16"): 0,
     np.dtype("uint32"): 0,
-    np.dtype("float32"): 0.0,
 }
 
 MAX_VALUES_BY_DTYPE = {
     np.dtype("uint8"): 255,
     np.dtype("uint16"): 65535,
     np.dtype("uint32"): 4294967295,
-    np.dtype("float32"): 1.0,
 }
 
 NUMPY_DTYPE_TO_OPENCV_DTYPE = {

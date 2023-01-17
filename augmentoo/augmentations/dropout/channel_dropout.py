@@ -13,7 +13,9 @@ __all__ = ["ChannelDropout"]
 
 @preserve_shape
 def channel_dropout(
-    img: np.ndarray, channels_to_drop: Union[int, Tuple[int, ...], np.ndarray], fill_value: Union[int, float] = 0
+    img: np.ndarray,
+    channels_to_drop: Union[int, Tuple[int, ...], np.ndarray],
+    fill_value: Union[int, float] = 0,
 ) -> np.ndarray:
     if len(img.shape) == 2 or img.shape[2] == 1:
         raise NotImplementedError("Only one channel. ChannelDropout is not defined.")
@@ -76,9 +78,6 @@ class ChannelDropout(ImageOnlyTransform):
         channels_to_drop = random.sample(range(num_channels), k=num_drop_channels)
 
         return {"channels_to_drop": channels_to_drop}
-
-    def get_transform_init_args_names(self) -> Tuple[str, ...]:
-        return "channel_drop_range", "fill_value"
 
     @property
     def targets_as_params(self):

@@ -7,6 +7,7 @@ import cv2
 
 
 from augmentoo.core.decorators import preserve_shape
+from augmentoo.core.targets.image import ImageTarget
 from augmentoo.core.transforms_interface import ImageOnlyTransform, to_tuple
 
 __all__ = ["GaussianBlur"]
@@ -15,7 +16,7 @@ __all__ = ["GaussianBlur"]
 @preserve_shape
 def gaussian_blur(img, ksize, sigma=0):
     # When sigma=0, it is computed as `sigma = 0.3*((ksize-1)*0.5 - 1) + 0.8`
-    blur_fn = maybe_process_in_chunks(cv2.GaussianBlur, ksize=(ksize, ksize), sigmaX=sigma)
+    blur_fn = ImageTarget.maybe_process_in_chunks(cv2.GaussianBlur, ksize=(ksize, ksize), sigmaX=sigma)
     return blur_fn(img)
 
 
@@ -66,6 +67,3 @@ class GaussianBlur(ImageOnlyTransform):
             ksize = (ksize + 1) % (self.blur_limit[1] + 1)
 
         return {"ksize": ksize, "sigma": random.uniform(*self.sigma_limit)}
-
-    def get_transform_init_args_names(self):
-        return ("blur_limit", "sigma_limit")

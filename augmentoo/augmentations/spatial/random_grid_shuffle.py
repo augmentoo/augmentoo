@@ -136,6 +136,3 @@ class RandomGridShuffle(DualTransform):
     @property
     def targets_as_params(self):
         return ["image"]
-
-    def get_transform_init_args_names(self):
-        return ("grid",)

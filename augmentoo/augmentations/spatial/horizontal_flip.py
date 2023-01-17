@@ -36,7 +36,6 @@ def keypoint_hflip(keypoint, rows, cols):
     return (cols - 1) - x, y, angle, scale
 
 
-
 class HorizontalFlip(DualTransform):
     """Flip the input horizontally around the y-axis.
 
@@ -63,6 +62,3 @@ class HorizontalFlip(DualTransform):
 
     def apply_to_keypoint(self, keypoint, **params):
         return keypoint_hflip(keypoint, **params)
-
-    def get_transform_init_args_names(self):
-        return ()

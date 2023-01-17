@@ -52,9 +52,6 @@ class Downscale(ImageOnlyTransform):
             "interpolation": self.interpolation,
         }
 
-    def get_transform_init_args_names(self):
-        return "scale_min", "scale_max", "interpolation"
-
 
 class TemplateTransform(ImageOnlyTransform):
     """

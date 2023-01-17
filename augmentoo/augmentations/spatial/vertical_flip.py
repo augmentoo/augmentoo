@@ -49,6 +49,3 @@ class VerticalFlip(DualTransform):
 
     def apply_to_keypoint(self, keypoint, **params):
         return keypoint_vflip(keypoint, **params)
-
-    def get_transform_init_args_names(self):
-        return ()

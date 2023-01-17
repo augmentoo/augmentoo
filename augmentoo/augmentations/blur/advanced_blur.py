@@ -116,13 +116,3 @@ class AdvancedBlur(ImageOnlyTransform):
         # Normalize kernel
         kernel = kernel.astype(np.float32) / np.sum(kernel)
         return {"kernel": kernel}
-
-    def get_transform_init_args_names(self):
-        return (
-            "blur_limit",
-            "sigmaX_limit",
-            "sigmaY_limit",
-            "rotate_limit",
-            "beta_limit",
-            "noise_limit",
-        )

@@ -58,6 +58,3 @@ class Normalize(ImageOnlyTransform):
 
     def apply(self, image, **params):
         return normalize(image, self.mean, self.std, self.max_pixel_value)
-
-    def get_transform_init_args_names(self):
-        return ("mean", "std", "max_pixel_value")

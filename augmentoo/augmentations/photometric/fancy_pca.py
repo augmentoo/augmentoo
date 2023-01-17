@@ -107,6 +107,3 @@ class FancyPCA(ImageOnlyTransform):
 
     def get_params(self):
         return {"alpha": random.gauss(0, self.alpha)}
-
-    def get_transform_init_args_names(self):
-        return ("alpha",)

@@ -69,6 +69,3 @@ class RingingOvershoot(ImageOnlyTransform):
 
     def apply(self, img, kernel=None, **params):
         return ImageTarget.convolve(img, kernel)
-
-    def get_transform_init_args_names(self):
-        return ("blur_limit", "cutoff")

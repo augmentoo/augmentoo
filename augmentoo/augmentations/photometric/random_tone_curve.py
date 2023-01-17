@@ -73,6 +73,3 @@ class RandomToneCurve(ImageOnlyTransform):
             "low_y": np.clip(random_utils.normal(loc=0.25, scale=self.scale), 0, 1),
             "high_y": np.clip(random_utils.normal(loc=0.75, scale=self.scale), 0, 1),
         }
-
-    def get_transform_init_args_names(self):
-        return ("scale",)

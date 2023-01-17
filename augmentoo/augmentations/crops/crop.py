@@ -35,6 +35,3 @@ class Crop(DualTransform):
 
     def apply_to_keypoint(self, keypoint, **params):
         return F.crop_keypoint_by_coords(keypoint, crop_coords=(self.x_min, self.y_min, self.x_max, self.y_max))
-
-    def get_transform_init_args_names(self):
-        return ("x_min", "y_min", "x_max", "y_max")

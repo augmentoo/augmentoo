@@ -97,6 +97,3 @@ class RandomBrightnessContrast(ImageOnlyTransform):
             "alpha": 1.0 + random.uniform(self.contrast_limit[0], self.contrast_limit[1]),
             "beta": 0.0 + random.uniform(self.brightness_limit[0], self.brightness_limit[1]),
         }
-
-    def get_transform_init_args_names(self):
-        return ("brightness_limit", "contrast_limit", "brightness_by_max")

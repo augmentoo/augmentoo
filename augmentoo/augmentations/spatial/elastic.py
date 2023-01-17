@@ -128,7 +128,12 @@ def elastic_transform(
     matrix = cv2.getAffineTransform(pts1, pts2)
 
     warp_fn = _maybe_process_in_chunks(
-        cv2.warpAffine, M=matrix, dsize=(width, height), flags=interpolation, borderMode=border_mode, borderValue=value
+        cv2.warpAffine,
+        M=matrix,
+        dsize=(width, height),
+        flags=interpolation,
+        borderMode=border_mode,
+        borderValue=value,
     )
     img = warp_fn(img)
 
@@ -147,14 +152,22 @@ def elastic_transform(
             dy *= alpha
     else:
         dx = np.float32(
-            gaussian_filter((random_utils.rand(height, width, random_state=random_state) * 2 - 1), sigma) * alpha
+            gaussian_filter(
+                (random_utils.rand(height, width, random_state=random_state) * 2 - 1),
+                sigma,
+            )
+            * alpha
         )
         if same_dxdy:
             # Speed up
             dy = dx
         else:
             dy = np.float32(
-                gaussian_filter((random_utils.rand(height, width, random_state=random_state) * 2 - 1), sigma) * alpha
+                gaussian_filter(
+                    (random_utils.rand(height, width, random_state=random_state) * 2 - 1),
+                    sigma,
+                )
+                * alpha
             )
 
     x, y = np.meshgrid(np.arange(width), np.arange(height))
@@ -163,7 +176,12 @@ def elastic_transform(
     map_y = np.float32(y + dy)
 
     remap_fn = _maybe_process_in_chunks(
-        cv2.remap, map1=map_x, map2=map_y, interpolation=interpolation, borderMode=border_mode, borderValue=value
+        cv2.remap,
+        map1=map_x,
+        map2=map_y,
+        interpolation=interpolation,
+        borderMode=border_mode,
+        borderValue=value,
     )
     return remap_fn(img)
 
@@ -258,16 +276,3 @@ class ElasticTransform(DualTransform):
 
     def get_params(self):
         return {"random_state": random.randint(0, 10000)}
-
-    def get_transform_init_args_names(self):
-        return (
-            "alpha",
-            "sigma",
-            "alpha_affine",
-            "interpolation",
-            "border_mode",
-            "value",
-            "mask_value",
-            "approximate",
-            "same_dxdy",
-        )

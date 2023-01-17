@@ -40,7 +40,11 @@ class RandomResizedCrop(_BaseRandomSizedCrop):
     ):
 
         super(RandomResizedCrop, self).__init__(
-            height=height, width=width, interpolation=interpolation, always_apply=always_apply, p=p
+            height=height,
+            width=width,
+            interpolation=interpolation,
+            always_apply=always_apply,
+            p=p,
         )
         self.scale = scale
         self.ratio = ratio
@@ -93,6 +97,3 @@ class RandomResizedCrop(_BaseRandomSizedCrop):
     @property
     def targets_as_params(self):
         return ["image"]
-
-    def get_transform_init_args_names(self):
-        return "height", "width", "scale", "ratio", "interpolation"

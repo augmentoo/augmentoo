@@ -173,15 +173,3 @@ class CoarseDropout(DualTransform):
                     remaining_keypoints.append(kp)
             keypoints = remaining_keypoints
         return keypoints
-
-    def get_transform_init_args_names(self):
-        return (
-            "max_holes",
-            "max_height",
-            "max_width",
-            "min_holes",
-            "min_height",
-            "min_width",
-            "fill_value",
-            "mask_fill_value",
-        )

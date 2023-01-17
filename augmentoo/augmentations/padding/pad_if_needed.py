@@ -158,8 +158,11 @@ class PadIfNeeded(DualTransform):
             w_pad_left = pad_cols // 2
             w_pad_right = pad_cols - w_pad_left
 
-        h_pad_top, h_pad_bottom, w_pad_left, w_pad_right = self.__update_position_params(
-            h_top=h_pad_top, h_bottom=h_pad_bottom, w_left=w_pad_left, w_right=w_pad_right
+        (h_pad_top, h_pad_bottom, w_pad_left, w_pad_right,) = self.__update_position_params(
+            h_top=h_pad_top,
+            h_bottom=h_pad_bottom,
+            w_left=w_pad_left,
+            w_right=w_pad_right,
         )
 
         params.update(
@@ -203,17 +206,6 @@ class PadIfNeeded(DualTransform):
     def apply_to_keypoint(self, keypoint, pad_top=0, pad_bottom=0, pad_left=0, pad_right=0, **params):
         x, y, angle, scale = keypoint
         return x + pad_left, y + pad_top, angle, scale
-
-    def get_transform_init_args_names(self):
-        return (
-            "min_height",
-            "min_width",
-            "pad_height_divisor",
-            "pad_width_divisor",
-            "border_mode",
-            "value",
-            "mask_value",
-        )
 
     def __update_position_params(
         self, h_top: int, h_bottom: int, w_left: int, w_right: int

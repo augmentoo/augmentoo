@@ -13,7 +13,9 @@ __all__ = ["Cutout"]
 
 
 def cutout(
-    img: np.ndarray, holes: Iterable[Tuple[int, int, int, int]], fill_value: Union[int, float] = 0
+    img: np.ndarray,
+    holes: Iterable[Tuple[int, int, int, int]],
+    fill_value: Union[int, float] = 0,
 ) -> np.ndarray:
     # Make a copy of the input image since we don't want to modify it directly
     img = img.copy()
@@ -85,6 +87,3 @@ class Cutout(ImageOnlyTransform):
     @property
     def targets_as_params(self):
         return ["image"]
-
-    def get_transform_init_args_names(self) -> Tuple[str, ...]:
-        return ("num_holes", "max_h_size", "max_w_size")

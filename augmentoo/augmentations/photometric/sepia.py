@@ -32,6 +32,3 @@ class ToSepia(ImageOnlyTransform):
         if not is_rgb_image(image):
             raise RuntimeError("ToSepia transformation expects 3-channel images.")
         return F.linear_transformation_rgb(image, self.sepia_transformation_matrix)
-
-    def get_transform_init_args_names(self):
-        return ()

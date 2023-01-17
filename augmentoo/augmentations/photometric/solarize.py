@@ -67,6 +67,3 @@ class Solarize(ImageOnlyTransform):
 
     def get_params(self):
         return {"threshold": random.uniform(self.threshold[0], self.threshold[1])}
-
-    def get_transform_init_args_names(self):
-        return ("threshold",)

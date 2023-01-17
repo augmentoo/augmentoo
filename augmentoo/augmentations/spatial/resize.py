@@ -70,6 +70,3 @@ class Resize(DualTransform):
         scale_x = self.width / width
         scale_y = self.height / height
         return keypoint_scale(keypoint, scale_x, scale_y)
-
-    def get_transform_init_args_names(self):
-        return ("height", "width", "interpolation")

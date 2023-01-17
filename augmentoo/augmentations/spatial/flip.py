@@ -104,6 +104,3 @@ class Flip(DualTransform):
 
     def apply_to_keypoint(self, keypoint, **params):
         return keypoint_flip(keypoint, **params)
-
-    def get_transform_init_args_names(self):
-        return ()

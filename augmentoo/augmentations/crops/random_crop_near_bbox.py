@@ -48,7 +48,13 @@ class RandomCropNearBBox(DualTransform):
             raise ValueError("Invalid max_part_shift. Got: {}".format(max_part_shift))
 
     def apply(
-        self, img: np.ndarray, x_min: int = 0, x_max: int = 0, y_min: int = 0, y_max: int = 0, **params
+        self,
+        img: np.ndarray,
+        x_min: int = 0,
+        x_max: int = 0,
+        y_min: int = 0,
+        y_max: int = 0,
+        **params,
     ) -> np.ndarray:
         return F.clamping_crop(img, x_min, y_min, x_max, y_max)
 
@@ -85,6 +91,3 @@ class RandomCropNearBBox(DualTransform):
     @property
     def targets_as_params(self) -> List[str]:
         return [self.cropping_bbox_key]
-
-    def get_transform_init_args_names(self) -> Tuple[str]:
-        return ("max_part_shift",)

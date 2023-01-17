@@ -59,6 +59,3 @@ class CLAHE(ImageOnlyTransform):
 
     def get_params(self):
         return {"clip_limit": random.uniform(self.clip_limit[0], self.clip_limit[1])}
-
-    def get_transform_init_args_names(self):
-        return ("clip_limit", "tile_grid_size")

@@ -7,7 +7,16 @@ NumType = Union[int, float, np.ndarray]
 IntNumType = Union[int, np.ndarray]
 Size = Union[int, Sequence[int]]
 
-__all__ = ["get_random_state", "uniform", "poisson", "normal", "choice", "random", "randint", "permutation"]
+__all__ = [
+    "get_random_state",
+    "uniform",
+    "poisson",
+    "normal",
+    "choice",
+    "random",
+    "randint",
+    "permutation",
+]
 
 
 def get_random_state() -> np.random.RandomState:
@@ -43,7 +52,9 @@ def normal(
 
 
 def poisson(
-    lam: NumType = 1.0, size: Optional[Size] = None, random_state: Optional[np.random.RandomState] = None
+    lam: NumType = 1.0,
+    size: Optional[Size] = None,
+    random_state: Optional[np.random.RandomState] = None,
 ) -> Any:
     if random_state is None:
         random_state = get_random_state()
@@ -51,7 +62,8 @@ def poisson(
 
 
 def permutation(
-    x: Union[int, Sequence[float], np.ndarray], random_state: Optional[np.random.RandomState] = None
+    x: Union[int, Sequence[float], np.ndarray],
+    random_state: Optional[np.random.RandomState] = None,
 ) -> Any:
     if random_state is None:
         random_state = get_random_state()
