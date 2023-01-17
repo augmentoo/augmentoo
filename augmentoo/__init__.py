@@ -1,4 +1,4 @@
-__version__ = "1.2.0"
+__version__ = "23.1"
 
 from .core.pipeline import Pipeline
 from .core.targets.image import ImageTarget
